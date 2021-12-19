@@ -4,6 +4,7 @@ import App from './App';
 import {createGlobalStyle, ThemeProvider} from "styled-components";
 import {RecoilRoot} from "recoil";
 import {theme} from "./theme";
+import {QueryClient, QueryClientProvider} from "react-query";
 
 // 출처 : https://meyerweb.com/eric/tools/css/reset/
 const GlobalStyle = createGlobalStyle`
@@ -67,23 +68,29 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-weight: 300;
     font-family: 'Source Sans Pro', sans-serif;
-    color: black;
+    color: ${props => props.theme.white.darker};
     line-height: 1.2;
+    background-color: black;
   }
-  
-    // Link 태그는 결국 HTML 에서 a 태그로 바뀌므로 이곳에서 CSS 를 설정한다.
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+
+  // Link 태그는 결국 HTML 에서 a 태그로 바뀌므로 이곳에서 CSS 를 설정한다.
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 `;
+
+// API 를 가져오기 위한 QueryClient / QueryClientProvider
+const client = new QueryClient();
 
 ReactDOM.render(
     <RecoilRoot>
-        <ThemeProvider theme={theme}>
-            <GlobalStyle/>
-            <App/>
-        </ThemeProvider>
+        <QueryClientProvider client={client}>
+            <ThemeProvider theme={theme}>
+                <GlobalStyle/>
+                <App/>
+            </ThemeProvider>
+        </QueryClientProvider>
     </RecoilRoot>
     , document.getElementById('root')
 );
